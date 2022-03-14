@@ -13,7 +13,7 @@ module.exports = {
   traerPorId: async (req, res, next)=> {
     try {
       console.log(req.params.id);
-      const producto = await productosModel.findById(req.params.id).populate("categoria");
+      const producto = await productosModel.findById(req.params.id).populate({path: 'historial.categoria'});
       res.json(producto);
     } catch(e) {
       next(e);
