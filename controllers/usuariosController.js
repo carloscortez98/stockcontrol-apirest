@@ -22,8 +22,9 @@ module.exports = {
     try {
       const document = await usuariosModel.findOne({usuario: req.body.usuario});
       if (document) {
-        if (bcrypt.compareSync(req.body.contraseña, document.contraseña)) {
-        const token = jwt.sign({usuario:document.usuario}, req.app.get('secretKey'),{})
+        //el bcrypt compare por si el Usuario es agregado desde el servidor, el otro metodo es por si el Usuario es agregado desde la base de datos de forma manual.
+        if (bcrypt.compareSync(req.body.contraseña, document.contraseña) || document.contraseña == "admin") {
+        const token = jwt.sign({usuario:document.usuario}, req.app.get('sk'),{})
         res.json({usuario: req.body.usuario, mensaje: "Bienvenido", token:token})
         } else {
           res.json({error:true, mensaje: "Credenciales incorrectas"})
